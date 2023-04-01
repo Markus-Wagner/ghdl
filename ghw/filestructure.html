@@ -1,0 +1,1081 @@
+<!doctype html>
+<html class="no-js" lang="en">
+  <head><meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width,initial-scale=1"/>
+    <meta name="color-scheme" content="light dark"><meta name="generator" content="Docutils 0.19: https://docutils.sourceforge.io/" />
+<link rel="author" title="About these documents" href="../about.html" /><link rel="index" title="Index" href="../genindex.html" /><link rel="search" title="Search" href="../search.html" /><link rel="next" title="Debugging" href="../development/Debugging.html" /><link rel="prev" title="GHDL Waveform (GHW)" href="index.html" />
+
+    <link rel="shortcut icon" href="../_static/icon.png"/><!-- Generated with Sphinx 6.1.3 and Furo 2023.03.27 -->
+        <title>GHW file structure - 4.0.0-dev</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo.css?digest=fad236701ea90a88636c2a8c73b44ae642ed2a53" />
+    <link rel="stylesheet" type="text/css" href="../_static/graphviz.css" />
+    <link rel="stylesheet" type="text/css" href="../_static/styles/furo-extensions.css?digest=30d1aed668e5c3a91c3e3bf6a60b675221979f0e" />
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/fontawesome.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/solid.min.css" />
+    <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/brands.min.css" />
+    
+    
+
+
+<style>
+  body {
+    --color-code-background: #f0f3f3;
+  --color-code-foreground: black;
+  
+  }
+  @media not print {
+    body[data-theme="dark"] {
+      --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+    }
+    @media (prefers-color-scheme: dark) {
+      body:not([data-theme="light"]) {
+        --color-code-background: #202020;
+  --color-code-foreground: #d0d0d0;
+  
+      }
+    }
+  }
+</style></head>
+  <body>
+    
+    <script>
+      document.body.dataset.theme = localStorage.getItem("theme") || "auto";
+    </script>
+    
+
+<svg xmlns="http://www.w3.org/2000/svg" style="display: none;">
+  <symbol id="svg-toc" viewBox="0 0 24 24">
+    <title>Contents</title>
+    <svg stroke="currentColor" fill="currentColor" stroke-width="0" viewBox="0 0 1024 1024">
+      <path d="M408 442h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8zm-8 204c0 4.4 3.6 8 8 8h480c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8H408c-4.4 0-8 3.6-8 8v56zm504-486H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zm0 632H120c-4.4 0-8 3.6-8 8v56c0 4.4 3.6 8 8 8h784c4.4 0 8-3.6 8-8v-56c0-4.4-3.6-8-8-8zM115.4 518.9L271.7 642c5.8 4.6 14.4.5 14.4-6.9V388.9c0-7.4-8.5-11.5-14.4-6.9L115.4 505.1a8.74 8.74 0 0 0 0 13.8z"/>
+    </svg>
+  </symbol>
+  <symbol id="svg-menu" viewBox="0 0 24 24">
+    <title>Menu</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-menu">
+      <line x1="3" y1="12" x2="21" y2="12"></line>
+      <line x1="3" y1="6" x2="21" y2="6"></line>
+      <line x1="3" y1="18" x2="21" y2="18"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-arrow-right" viewBox="0 0 24 24">
+    <title>Expand</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="feather-chevron-right">
+      <polyline points="9 18 15 12 9 6"></polyline>
+    </svg>
+  </symbol>
+  <symbol id="svg-sun" viewBox="0 0 24 24">
+    <title>Light mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="feather-sun">
+      <circle cx="12" cy="12" r="5"></circle>
+      <line x1="12" y1="1" x2="12" y2="3"></line>
+      <line x1="12" y1="21" x2="12" y2="23"></line>
+      <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+      <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+      <line x1="1" y1="12" x2="3" y2="12"></line>
+      <line x1="21" y1="12" x2="23" y2="12"></line>
+      <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+      <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+    </svg>
+  </symbol>
+  <symbol id="svg-moon" viewBox="0 0 24 24">
+    <title>Dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-moon">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none" />
+      <path d="M12 3c.132 0 .263 0 .393 0a7.5 7.5 0 0 0 7.92 12.446a9 9 0 1 1 -8.313 -12.454z" />
+    </svg>
+  </symbol>
+  <symbol id="svg-sun-half" viewBox="0 0 24 24">
+    <title>Auto light/dark mode</title>
+    <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+      stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" class="icon-tabler-shadow">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <circle cx="12" cy="12" r="9" />
+      <path d="M13 12h5" />
+      <path d="M13 15h4" />
+      <path d="M13 18h1" />
+      <path d="M13 9h4" />
+      <path d="M13 6h1" />
+    </svg>
+  </symbol>
+</svg>
+
+<input type="checkbox" class="sidebar-toggle" name="__navigation" id="__navigation">
+<input type="checkbox" class="sidebar-toggle" name="__toc" id="__toc">
+<label class="overlay sidebar-overlay" for="__navigation">
+  <div class="visually-hidden">Hide navigation sidebar</div>
+</label>
+<label class="overlay toc-overlay" for="__toc">
+  <div class="visually-hidden">Hide table of contents sidebar</div>
+</label>
+
+
+
+<div class="page">
+  <header class="mobile-header">
+    <div class="header-left">
+      <label class="nav-overlay-icon" for="__navigation">
+        <div class="visually-hidden">Toggle site navigation sidebar</div>
+        <i class="icon"><svg><use href="#svg-menu"></use></svg></i>
+      </label>
+    </div>
+    <div class="header-center">
+      <a href="../index.html"><div class="brand">4.0.0-dev</div></a>
+    </div>
+    <div class="header-right">
+      <div class="theme-toggle-container theme-toggle-header">
+        <button class="theme-toggle">
+          <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+          <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+          <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+          <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+        </button>
+      </div>
+      <label class="toc-overlay-icon toc-header-icon" for="__toc">
+        <div class="visually-hidden">Toggle table of contents sidebar</div>
+        <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+      </label>
+    </div>
+  </header>
+  <aside class="sidebar-drawer">
+    <div class="sidebar-container">
+      
+      <div class="sidebar-sticky"><a class="sidebar-brand" href="../index.html">
+  
+  <div class="sidebar-logo-container">
+    <img class="sidebar-logo" src="../_static/logo.png" alt="Logo"/>
+  </div>
+  
+  <span class="sidebar-brand-text">4.0.0-dev</span>
+  
+</a><form class="sidebar-search-container" method="get" action="../search.html" role="search">
+  <input class="sidebar-search" placeholder="Search" name="q" aria-label="Search">
+  <input type="hidden" name="check_keywords" value="yes">
+  <input type="hidden" name="area" value="default">
+</form>
+<div id="searchbox"></div><div class="sidebar-scroll"><div class="sidebar-tree">
+  <p class="caption" role="heading"><span class="caption-text">Introduction</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../about.html">About</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../getting.html">Getting | Installing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../contribute.html">Contributing</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../licenses.html">Copyrights | Licenses</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">GHDL usage</span></p>
+<ul>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../quick_start/index.html">Quick Start Guide</a><input class="toctree-checkbox" id="toctree-checkbox-1" name="toctree-checkbox-1" role="switch" type="checkbox"/><label for="toctree-checkbox-1"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../quick_start/simulation/index.html">Simulation</a><input class="toctree-checkbox" id="toctree-checkbox-2" name="toctree-checkbox-2" role="switch" type="checkbox"/><label for="toctree-checkbox-2"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../quick_start/simulation/hello/index.html"><cite>Hello world</cite> program</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../quick_start/simulation/heartbeat/index.html"><cite>Heartbeat</cite> module</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../quick_start/simulation/adder/index.html"><cite>Full adder</cite> module and testbench</a></li>
+<li class="toctree-l3"><a class="reference internal" href="../quick_start/simulation/DLXModelSuite.html">Working with non-trivial designs</a></li>
+</ul>
+</li>
+<li class="toctree-l2"><a class="reference external" href="https://ghdl.github.io/ghdl-cosim">Co-Simulation</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../quick_start/python/index.html">Python Interfaces</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="../using/InvokingGHDL.html">Invoking GHDL</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../using/Simulation.html">Simulation (runtime)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../using/Synthesis.html">Synthesis</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../using/CommandReference.html">Additional Command Reference</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../using/ImplementationOfVHDL.html">Implementation of VHDL</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../using/ImplementationOfVITAL.html">Implementation of VITAL</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Development</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../development/Directories.html">Directory structure</a></li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../development/building/index.html">Building GHDL</a><input class="toctree-checkbox" id="toctree-checkbox-3" name="toctree-checkbox-3" role="switch" type="checkbox"/><label for="toctree-checkbox-3"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2"><a class="reference internal" href="../development/building/Sources.html">Sources</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../development/building/mcode.html">mcode backend</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../development/building/LLVM.html">LLVM backend</a></li>
+<li class="toctree-l2"><a class="reference internal" href="../development/building/GCC.html">GCC backend</a></li>
+</ul>
+</li>
+<li class="toctree-l1 has-children"><a class="reference internal" href="../pyGHDL/pyGHDL.html">Python Interfaces</a><input class="toctree-checkbox" id="toctree-checkbox-4" name="toctree-checkbox-4" role="switch" type="checkbox"/><label for="toctree-checkbox-4"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../pyGHDL/pyGHDL.cli.html"><code class="docutils literal notranslate"><span class="pre">pyGHDL.cli</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-5" name="toctree-checkbox-5" role="switch" type="checkbox"/><label for="toctree-checkbox-5"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../pyGHDL/pyGHDL.cli.dom.html"><code class="docutils literal notranslate"><span class="pre">pyGHDL.cli.dom</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../pyGHDL/pyGHDL.cli.lsp.html"><code class="docutils literal notranslate"><span class="pre">pyGHDL.cli.lsp</span></code></a></li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../pyGHDL/pyGHDL.dom.html"><code class="docutils literal notranslate"><span class="pre">pyGHDL.dom</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-6" name="toctree-checkbox-6" role="switch" type="checkbox"/><label for="toctree-checkbox-6"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../pyGHDL/pyGHDL.dom.Aggregates.html"><code class="docutils literal notranslate"><span class="pre">pyGHDL.dom.Aggregates</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../pyGHDL/pyGHDL.dom.Attribute.html"><code class="docutils literal notranslate"><span class="pre">pyGHDL.dom.Attribute</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../pyGHDL/pyGHDL.dom.Concurrent.html"><code class="docutils literal notranslate"><span class="pre">pyGHDL.dom.Concurrent</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../pyGHDL/pyGHDL.dom.DesignUnit.html"><code class="docutils literal notranslate"><span class="pre">pyGHDL.dom.DesignUnit</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../pyGHDL/pyGHDL.dom.Expression.html"><code class="docutils literal notranslate"><span class="pre">pyGHDL.dom.Expression</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../pyGHDL/pyGHDL.dom.InterfaceItem.html"><code class="docutils literal notranslate"><span class="pre">pyGHDL.dom.InterfaceItem</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../pyGHDL/pyGHDL.dom.Literal.html"><code class="docutils literal notranslate"><span class="pre">pyGHDL.dom.Literal</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../pyGHDL/pyGHDL.dom.Misc.html"><code class="docutils literal notranslate"><span class="pre">pyGHDL.dom.Misc</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../pyGHDL/pyGHDL.dom.Names.html"><code class="docutils literal notranslate"><span class="pre">pyGHDL.dom.Names</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../pyGHDL/pyGHDL.dom.NonStandard.html"><code class="docutils literal notranslate"><span class="pre">pyGHDL.dom.NonStandard</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../pyGHDL/pyGHDL.dom.Object.html"><code class="docutils literal notranslate"><span class="pre">pyGHDL.dom.Object</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../pyGHDL/pyGHDL.dom.PSL.html"><code class="docutils literal notranslate"><span class="pre">pyGHDL.dom.PSL</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../pyGHDL/pyGHDL.dom.Range.html"><code class="docutils literal notranslate"><span class="pre">pyGHDL.dom.Range</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../pyGHDL/pyGHDL.dom.Sequential.html"><code class="docutils literal notranslate"><span class="pre">pyGHDL.dom.Sequential</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../pyGHDL/pyGHDL.dom.Subprogram.html"><code class="docutils literal notranslate"><span class="pre">pyGHDL.dom.Subprogram</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../pyGHDL/pyGHDL.dom.Symbol.html"><code class="docutils literal notranslate"><span class="pre">pyGHDL.dom.Symbol</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../pyGHDL/pyGHDL.dom.Type.html"><code class="docutils literal notranslate"><span class="pre">pyGHDL.dom.Type</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../pyGHDL/pyGHDL.dom._Translate.html"><code class="docutils literal notranslate"><span class="pre">pyGHDL.dom._Translate</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../pyGHDL/pyGHDL.dom._Utils.html"><code class="docutils literal notranslate"><span class="pre">pyGHDL.dom._Utils</span></code></a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../pyGHDL/pyGHDL.dom.formatting.html"><code class="docutils literal notranslate"><span class="pre">pyGHDL.dom.formatting</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-7" name="toctree-checkbox-7" role="switch" type="checkbox"/><label for="toctree-checkbox-7"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../pyGHDL/pyGHDL.dom.formatting.GraphML.html"><code class="docutils literal notranslate"><span class="pre">pyGHDL.dom.formatting.GraphML</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../pyGHDL/pyGHDL.dom.formatting.prettyprint.html"><code class="docutils literal notranslate"><span class="pre">pyGHDL.dom.formatting.prettyprint</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../pyGHDL/pyGHDL.libghdl.html"><code class="docutils literal notranslate"><span class="pre">pyGHDL.libghdl</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-8" name="toctree-checkbox-8" role="switch" type="checkbox"/><label for="toctree-checkbox-8"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../pyGHDL/pyGHDL.libghdl._decorator.html"><code class="docutils literal notranslate"><span class="pre">pyGHDL.libghdl._decorator</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../pyGHDL/pyGHDL.libghdl._types.html"><code class="docutils literal notranslate"><span class="pre">pyGHDL.libghdl._types</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../pyGHDL/pyGHDL.libghdl.errorout.html"><code class="docutils literal notranslate"><span class="pre">pyGHDL.libghdl.errorout</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../pyGHDL/pyGHDL.libghdl.errorout_console.html"><code class="docutils literal notranslate"><span class="pre">pyGHDL.libghdl.errorout_console</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../pyGHDL/pyGHDL.libghdl.errorout_memory.html"><code class="docutils literal notranslate"><span class="pre">pyGHDL.libghdl.errorout_memory</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../pyGHDL/pyGHDL.libghdl.file_comments.html"><code class="docutils literal notranslate"><span class="pre">pyGHDL.libghdl.file_comments</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../pyGHDL/pyGHDL.libghdl.files_map.html"><code class="docutils literal notranslate"><span class="pre">pyGHDL.libghdl.files_map</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../pyGHDL/pyGHDL.libghdl.files_map_editor.html"><code class="docutils literal notranslate"><span class="pre">pyGHDL.libghdl.files_map_editor</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../pyGHDL/pyGHDL.libghdl.flags.html"><code class="docutils literal notranslate"><span class="pre">pyGHDL.libghdl.flags</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../pyGHDL/pyGHDL.libghdl.libraries.html"><code class="docutils literal notranslate"><span class="pre">pyGHDL.libghdl.libraries</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../pyGHDL/pyGHDL.libghdl.name_table.html"><code class="docutils literal notranslate"><span class="pre">pyGHDL.libghdl.name_table</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../pyGHDL/pyGHDL.libghdl.std_names.html"><code class="docutils literal notranslate"><span class="pre">pyGHDL.libghdl.std_names</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../pyGHDL/pyGHDL.libghdl.str_table.html"><code class="docutils literal notranslate"><span class="pre">pyGHDL.libghdl.str_table</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../pyGHDL/pyGHDL.libghdl.utils.html"><code class="docutils literal notranslate"><span class="pre">pyGHDL.libghdl.utils</span></code></a></li>
+<li class="toctree-l3 has-children"><a class="reference internal" href="../pyGHDL/pyGHDL.libghdl.vhdl.html"><code class="docutils literal notranslate"><span class="pre">pyGHDL.libghdl.vhdl</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-9" name="toctree-checkbox-9" role="switch" type="checkbox"/><label for="toctree-checkbox-9"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l4"><a class="reference internal" href="../pyGHDL/pyGHDL.libghdl.vhdl.canon.html"><code class="docutils literal notranslate"><span class="pre">pyGHDL.libghdl.vhdl.canon</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../pyGHDL/pyGHDL.libghdl.vhdl.elocations.html"><code class="docutils literal notranslate"><span class="pre">pyGHDL.libghdl.vhdl.elocations</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../pyGHDL/pyGHDL.libghdl.vhdl.flists.html"><code class="docutils literal notranslate"><span class="pre">pyGHDL.libghdl.vhdl.flists</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../pyGHDL/pyGHDL.libghdl.vhdl.formatters.html"><code class="docutils literal notranslate"><span class="pre">pyGHDL.libghdl.vhdl.formatters</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../pyGHDL/pyGHDL.libghdl.vhdl.ieee.html"><code class="docutils literal notranslate"><span class="pre">pyGHDL.libghdl.vhdl.ieee</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../pyGHDL/pyGHDL.libghdl.vhdl.lists.html"><code class="docutils literal notranslate"><span class="pre">pyGHDL.libghdl.vhdl.lists</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../pyGHDL/pyGHDL.libghdl.vhdl.nodes.html"><code class="docutils literal notranslate"><span class="pre">pyGHDL.libghdl.vhdl.nodes</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../pyGHDL/pyGHDL.libghdl.vhdl.nodes_meta.html"><code class="docutils literal notranslate"><span class="pre">pyGHDL.libghdl.vhdl.nodes_meta</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../pyGHDL/pyGHDL.libghdl.vhdl.nodes_utils.html"><code class="docutils literal notranslate"><span class="pre">pyGHDL.libghdl.vhdl.nodes_utils</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../pyGHDL/pyGHDL.libghdl.vhdl.parse.html"><code class="docutils literal notranslate"><span class="pre">pyGHDL.libghdl.vhdl.parse</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../pyGHDL/pyGHDL.libghdl.vhdl.prints.html"><code class="docutils literal notranslate"><span class="pre">pyGHDL.libghdl.vhdl.prints</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../pyGHDL/pyGHDL.libghdl.vhdl.scanner.html"><code class="docutils literal notranslate"><span class="pre">pyGHDL.libghdl.vhdl.scanner</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../pyGHDL/pyGHDL.libghdl.vhdl.sem.html"><code class="docutils literal notranslate"><span class="pre">pyGHDL.libghdl.vhdl.sem</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../pyGHDL/pyGHDL.libghdl.vhdl.sem_lib.html"><code class="docutils literal notranslate"><span class="pre">pyGHDL.libghdl.vhdl.sem_lib</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../pyGHDL/pyGHDL.libghdl.vhdl.std_package.html"><code class="docutils literal notranslate"><span class="pre">pyGHDL.libghdl.vhdl.std_package</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../pyGHDL/pyGHDL.libghdl.vhdl.tokens.html"><code class="docutils literal notranslate"><span class="pre">pyGHDL.libghdl.vhdl.tokens</span></code></a></li>
+<li class="toctree-l4"><a class="reference internal" href="../pyGHDL/pyGHDL.libghdl.vhdl.utils.html"><code class="docutils literal notranslate"><span class="pre">pyGHDL.libghdl.vhdl.utils</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l2 has-children"><a class="reference internal" href="../pyGHDL/pyGHDL.lsp.html"><code class="docutils literal notranslate"><span class="pre">pyGHDL.lsp</span></code></a><input class="toctree-checkbox" id="toctree-checkbox-10" name="toctree-checkbox-10" role="switch" type="checkbox"/><label for="toctree-checkbox-10"><div class="visually-hidden">Toggle child pages in navigation</div><i class="icon"><svg><use href="#svg-arrow-right"></use></svg></i></label><ul>
+<li class="toctree-l3"><a class="reference internal" href="../pyGHDL/pyGHDL.lsp.document.html"><code class="docutils literal notranslate"><span class="pre">pyGHDL.lsp.document</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../pyGHDL/pyGHDL.lsp.lsp.html"><code class="docutils literal notranslate"><span class="pre">pyGHDL.lsp.lsp</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../pyGHDL/pyGHDL.lsp.lsptools.html"><code class="docutils literal notranslate"><span class="pre">pyGHDL.lsp.lsptools</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../pyGHDL/pyGHDL.lsp.references.html"><code class="docutils literal notranslate"><span class="pre">pyGHDL.lsp.references</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../pyGHDL/pyGHDL.lsp.symbols.html"><code class="docutils literal notranslate"><span class="pre">pyGHDL.lsp.symbols</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../pyGHDL/pyGHDL.lsp.version.html"><code class="docutils literal notranslate"><span class="pre">pyGHDL.lsp.version</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../pyGHDL/pyGHDL.lsp.vhdl_ls.html"><code class="docutils literal notranslate"><span class="pre">pyGHDL.lsp.vhdl_ls</span></code></a></li>
+<li class="toctree-l3"><a class="reference internal" href="../pyGHDL/pyGHDL.lsp.workspace.html"><code class="docutils literal notranslate"><span class="pre">pyGHDL.lsp.workspace</span></code></a></li>
+</ul>
+</li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="index.html">GHDL Waveform (GHW)</a></li>
+<li class="toctree-l1 current current-page"><a class="current reference internal" href="#">GHW file structure</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../development/Debugging.html">Debugging</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../development/CodingStyle.html">Coding Style</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../development/Scripts.html">Scripts</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Internals</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../internals/index.html">Overview</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../internals/Frontend.html">Front-end</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../internals/AST.html">AST</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../internals/RTI.html">Run Time Information (RTI)</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../gnatdoc/index.html">GNATdoc</a></li>
+</ul>
+<p class="caption" role="heading"><span class="caption-text">Index</span></p>
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="../genindex.html">Index</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../py-modindex.html">Python Module Index</a></li>
+</ul>
+
+</div>
+</div>
+
+      </div>
+      
+    </div>
+  </aside>
+  <div class="main">
+    <div class="content">
+      <div class="article-container">
+        <a href="#" class="back-to-top muted-link">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24">
+            <path d="M13 20h-2V8l-5.5 5.5-1.42-1.42L12 4.16l7.92 7.92-1.42 1.42L13 8v12z"></path>
+          </svg>
+          <span>Back to top</span>
+        </a>
+        <div class="content-icon-container">
+          <div class="edit-this-page">
+  <a class="muted-link" href="https://github.com/ghdl/ghdl/edit/main/doc/ghw/filestructure.rst" title="Edit this page">
+    <svg aria-hidden="true" viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
+      <path stroke="none" d="M0 0h24v24H0z" fill="none"/>
+      <path d="M4 20h4l10.5 -10.5a1.5 1.5 0 0 0 -4 -4l-10.5 10.5v4" />
+      <line x1="13.5" y1="6.5" x2="17.5" y2="10.5" />
+    </svg>
+    <span class="visually-hidden">Edit this page</span>
+  </a>
+</div><div class="theme-toggle-container theme-toggle-content">
+            <button class="theme-toggle">
+              <div class="visually-hidden">Toggle Light / Dark / Auto color theme</div>
+              <svg class="theme-icon-when-auto"><use href="#svg-sun-half"></use></svg>
+              <svg class="theme-icon-when-dark"><use href="#svg-moon"></use></svg>
+              <svg class="theme-icon-when-light"><use href="#svg-sun"></use></svg>
+            </button>
+          </div>
+          <label class="toc-overlay-icon toc-content-icon" for="__toc">
+            <div class="visually-hidden">Toggle table of contents sidebar</div>
+            <i class="icon"><svg><use href="#svg-toc"></use></svg></i>
+          </label>
+        </div>
+        <article role="main">
+          <section id="ghw-file-structure">
+<h1>GHW file structure<a class="headerlink" href="#ghw-file-structure" title="Permalink to this heading">#</a></h1>
+<div class="admonition warning">
+<p class="admonition-title">Warning</p>
+<p>This section was written while trying to understand libghw and may be inaccurate or
+outdated.</p>
+</div>
+<p>GHW is a binary format, divided into multiple sections and using native endianness.
+Currently the following sections exist:</p>
+<ul class="simple">
+<li><p>The file header starts with the magic header “GHDLwave\n” and contains some basic
+information like endianness word size, etc. In the future the base time unit may be
+added, which currently is hard coded to femto seconds.</p></li>
+<li><p>The strings section contains all data strings used by other sections, which refer to
+these strings by its position index (starting with 1 not 0). I.e. the names of types,
+signals, instances, processes and enum literals are stored here.</p></li>
+<li><p>The types section contains all type and subtype definitions.</p></li>
+<li><p><em>TODO</em> “well known types”</p></li>
+<li><p>The hierarchy section describes the design hierarchy</p></li>
+<li><p>The snapshot section contains initial values for all scalar signals. Composite signals
+like arrays and records are not stored directly, but by storing it scalar components.
+The value of such a composite signal can be obtained by retriving the scalar member
+signal ids from the hierarchy section and reading the values of these members.</p></li>
+<li><p>The cycles section saves for each simulation cycle the time delta to its predecessor
+and the values of those signals, which changed at the current cycle.</p></li>
+<li><p>At the end of the file, a directory section stores the start position of each section.</p></li>
+</ul>
+<p>Sometimes integer values are compressed to reduce the file size. In this case,they are
+always stored in little endian format and only the lower 7 bits of each byte are used to
+store the data value. An set MSB of each byte indicates, that an additional byte is
+required to hold the value. So a 127 would be saved as 0x7f, but an 128 as 0x01, 0x80.
+This format is refered to as <em>uleb128</em> in case of an unsigned integer, <em>sleb128</em> in case
+of a 32 bit signed integer an <em>lsleb128</em> in case of a 64 signed integer. A negative
+value can be detected that bit 7 of the last byte is set. In this case one must not
+forget to fill the remaining MSBs during decompression for a vaild two’s complement.</p>
+<section id="file-header">
+<h2>File header<a class="headerlink" href="#file-header" title="Permalink to this heading">#</a></h2>
+<p>Currently the file header at the beginning of a GHW file has the following structure:</p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>type</p></th>
+<th class="head"><p>content</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>9 byte array</p></td>
+<td><p>magic header b”GHDLwave\n”</p></td>
+</tr>
+<tr class="row-odd"><td><p>1 byte</p></td>
+<td><p>header length (currently 16)</p></td>
+</tr>
+<tr class="row-even"><td><p>1 byte</p></td>
+<td><p>file version major</p></td>
+</tr>
+<tr class="row-odd"><td><p>1 byte</p></td>
+<td><p>file version minor</p></td>
+</tr>
+<tr class="row-even"><td><p>1 byte</p></td>
+<td><p>endianness: 1 for LE, 2 for BE</p></td>
+</tr>
+<tr class="row-odd"><td><p>1 byte</p></td>
+<td><p>word size (4)</p></td>
+</tr>
+<tr class="row-even"><td><p>1 byte</p></td>
+<td><p>file offset: ?</p></td>
+</tr>
+<tr class="row-odd"><td><p>1 byte</p></td>
+<td><p>zero byte</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Future additions could include the base time unit. Currently its hard coded to femto
+seconds.</p>
+</section>
+<section id="strings">
+<h2>Strings<a class="headerlink" href="#strings" title="Permalink to this heading">#</a></h2>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>type</p></th>
+<th class="head"><p>content</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>8 bytes</p></td>
+<td><p>magic header “STR” + 5 zero bytes</p></td>
+</tr>
+<tr class="row-odd"><td><p>4 byte signed integer</p></td>
+<td><p>number of strings</p></td>
+</tr>
+<tr class="row-even"><td><p>4 byte signed integer</p></td>
+<td><p>number of bytes of all expanded strings?</p></td>
+</tr>
+<tr class="row-odd"><td><p>string entry 1</p></td>
+<td><p>has variable length</p></td>
+</tr>
+<tr class="row-even"><td><p>string entry 2</p></td>
+<td><p>has variable length</p></td>
+</tr>
+<tr class="row-odd"><td><p>string entry …</p></td>
+<td><p>has variable length</p></td>
+</tr>
+<tr class="row-even"><td><p>1 byte</p></td>
+<td><p>zero byte</p></td>
+</tr>
+<tr class="row-odd"><td><p>4 bytes</p></td>
+<td><p>“EOS” + zero byte</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>All strings are encoded with a subset the ASCII encoding. At the beginning of each
+string entry a compressed unsigned integer (type is <em>uleb32</em>) denotes the number of
+characters at the beginning of the previous string, that must be prepended to the string
+of this entry. Obviously that number must be zero for the first entry. I.e. the
+successive strings “std_ulogic” and “std_logic” would result in the following entries:</p>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="p">[[</span><span class="mi">0</span><span class="p">,</span> <span class="s2">&quot;std_ulogic&quot;</span><span class="p">],</span> <span class="p">[</span><span class="mi">4</span><span class="p">,</span> <span class="s2">&quot;logic]]</span>
+</pre></div>
+</div>
+<p>Integers of type <em>uleb32</em> have a variable length. The first byte contains bits 4 down to
+0 of the integer, the next byte bits 9 down to 5, etc. in their lower bits. A set bit 7
+indicates, that a further bit is required for the value of this integer. A set bit 6 or
+5 (or in the sense of logical or, not logical xor) indicates, that the current bit is a
+character as part of a string, else it is part of a compressed integer. As strings are
+not zero terminated, this is the only possibility to detect the beginning of a new
+string entry, but reduces the number of ASCII characters available.</p>
+</section>
+<section id="types">
+<h2>Types<a class="headerlink" href="#types" title="Permalink to this heading">#</a></h2>
+<p>The signal type and subtype definitions are stored here. To understand these GHW type
+definitions, chapter 5 of <em>IEEE Std 1076-XXXX: IEEE Standard for VHDL Language Reference
+Manual</em> is good lecture. Only scalar and composite types without its operations are
+necessary for GHW files. Scalar types consist of enums, ints, physical types and floats.
+Scalar subtypes are a collection of elements. In case all elements are of the same type,
+it is called an array, otherwise a record. Both can be un constrained, partially
+or fully constrained, which relates to the contained array indices. If the boundaries
+for all contained array indices are known, the type is fully constrained. There are also
+subtypes of composite types.</p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head" colspan="3"><p>type                  | content</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td colspan="3"><p>8 bytes               | magic header “TYP” + 5 zero bytes</p></td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p>4 byte signed integer</p></td>
+<td><p>number of types</p></td>
+</tr>
+<tr class="row-even"><td colspan="2"><p>variable length</p></td>
+<td><p>type 1</p></td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p>variable length</p></td>
+<td><p>type 2</p></td>
+</tr>
+<tr class="row-even"><td colspan="2"><p>variable length</p></td>
+<td><p>type …</p></td>
+</tr>
+<tr class="row-odd"><td colspan="2"><p>1 byte</p></td>
+<td><p>zero byte</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>The size and content of a type entry depends on the kind of type, but every entry starts
+with an unsigned byte denoting the kind of entry. The exact value is defined by the
+<em>Ghdl_Rtik</em> enum, though not all <em>Ghdl_Rtik</em> values denote a type. Following is the ID
+of the string of the type name. This ID is a compressed unsigned integer (<em>uleb128</em>).</p>
+<section id="base-types">
+<h3>Base types<a class="headerlink" href="#base-types" title="Permalink to this heading">#</a></h3>
+<p>Base types include:</p>
+<ul class="simple">
+<li><p>Type common (unused)</p></li>
+<li><p>Type enum</p></li>
+<li><p>Type scalar</p></li>
+<li><p>Type physical</p></li>
+<li><p>Type array</p></li>
+<li><p>Type record</p></li>
+</ul>
+<div class="highlight-default notranslate"><div class="highlight"><pre><span></span><span class="n">TODO</span><span class="p">:</span> <span class="n">figure</span> <span class="n">out</span> <span class="n">the</span> <span class="n">purpose</span> <span class="n">of</span> <span class="nb">type</span> <span class="n">common</span>
+</pre></div>
+</div>
+</section>
+<section id="subtypes">
+<h3>Subtypes<a class="headerlink" href="#subtypes" title="Permalink to this heading">#</a></h3>
+<p>Subtypes include:</p>
+<ul class="simple">
+<li><p>Subtype scalar</p></li>
+<li><p>Subtype array</p></li>
+<li><p>Subtype unbounded array</p></li>
+<li><p>Subtype record</p></li>
+<li><p>Subtype unbounded record</p></li>
+</ul>
+<p>Ghdl_Rtik_Type_B1, Ghdl_Rtik_Type_E8 (enum):</p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>type</p></th>
+<th class="head"><p>content</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>1 byte (u8)</p></td>
+<td><p>kind of type (ghdl_rtik)</p></td>
+</tr>
+<tr class="row-odd"><td><p>uleb128</p></td>
+<td><p>id of type name in strings section</p></td>
+</tr>
+<tr class="row-even"><td><p>uleb128</p></td>
+<td><p>number of literals</p></td>
+</tr>
+<tr class="row-odd"><td><p>uleb128[]</p></td>
+<td><p>array of literal string ids</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Ghdl_Rtik_Type_I32, Ghdl_Rtik_Type_I64, Ghdl_Rtik_Type_F64 (scalar):</p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>type</p></th>
+<th class="head"><p>content</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>1 byte (u8)</p></td>
+<td><p>kind of type (ghdl_rtik)</p></td>
+</tr>
+<tr class="row-odd"><td><p>uleb128</p></td>
+<td><p>id of type name in strings section</p></td>
+</tr>
+<tr class="row-even"><td><p>uleb128</p></td>
+<td><p>number of unit definitions</p></td>
+</tr>
+<tr class="row-odd"><td><p>GhwUnit[]</p></td>
+<td><p>unit definitions</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Ghdl_Rtik_Type_P32, Ghdl_Rtik_Type_P64 (physical):</p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>type</p></th>
+<th class="head"><p>content</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>1 byte (u8)</p></td>
+<td><p>kind of type (ghdl_rtik)</p></td>
+</tr>
+<tr class="row-odd"><td><p>uleb128</p></td>
+<td><p>id of type name in strings section</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Ghdl_Rtik_Subtype_Scalar (subtype of any scalar type)</p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>type</p></th>
+<th class="head"><p>content</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>1 byte (u8)</p></td>
+<td><p>kind of type (ghdl_rtik)</p></td>
+</tr>
+<tr class="row-odd"><td><p>uleb128</p></td>
+<td><p>id of type name in strings section</p></td>
+</tr>
+<tr class="row-even"><td><p>GhwRange</p></td>
+<td><p>value range</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Ghdl_Rtik_Type_Array</p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>type</p></th>
+<th class="head"><p>content</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>1 byte (u8)</p></td>
+<td><p>kind of type (ghdl_rtik)</p></td>
+</tr>
+<tr class="row-odd"><td><p>uleb128</p></td>
+<td><p>id of type name in strings section</p></td>
+</tr>
+<tr class="row-even"><td><p>uleb128</p></td>
+<td><p>number of dimensions</p></td>
+</tr>
+<tr class="row-odd"><td><p>uleb128[]</p></td>
+<td><p>type id of each range</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Ghdl_Rtik_Type_Subtype_Array</p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>type</p></th>
+<th class="head"><p>content</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>1 byte (u8)</p></td>
+<td><p>kind of type (ghdl_rtik)</p></td>
+</tr>
+<tr class="row-odd"><td><p>uleb128</p></td>
+<td><p>id of type name in strings section</p></td>
+</tr>
+<tr class="row-even"><td><p>TODO</p></td>
+<td><p>composite bounds</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Ghdl_Rtik_Type_Record, Ghdl_Rtik_Type_Unbounded_Record</p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>type</p></th>
+<th class="head"><p>content</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>1 byte (u8)</p></td>
+<td><p>kind of type (ghdl_rtik)</p></td>
+</tr>
+<tr class="row-odd"><td><p>uleb128</p></td>
+<td><p>id of type name in strings section</p></td>
+</tr>
+<tr class="row-even"><td><p>uleb128</p></td>
+<td><p>number of elements</p></td>
+</tr>
+<tr class="row-odd"><td><p>2*uleb128[]</p></td>
+<td><p>string and type id of each element</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Ghdl_Rtik_Subtype_Record</p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>type</p></th>
+<th class="head"><p>content</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>1 byte (u8)</p></td>
+<td><p>kind of type (ghdl_rtik)</p></td>
+</tr>
+<tr class="row-odd"><td><p>uleb128</p></td>
+<td><p>id of type name in strings section</p></td>
+</tr>
+<tr class="row-even"><td><p>uleb128</p></td>
+<td><p>id of base type</p></td>
+</tr>
+<tr class="row-odd"><td><p>TODO</p></td>
+<td><p>composite bounds, if base type is unbounded</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Ghdl_Rtik_Subtype_Unbounded_Record, Ghdl_Rtik_Subtype_Unbounded_Array</p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>type</p></th>
+<th class="head"><p>content</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>1 byte (u8)</p></td>
+<td><p>kind of type (ghdl_rtik)</p></td>
+</tr>
+<tr class="row-odd"><td><p>uleb128</p></td>
+<td><p>id of type name in strings section</p></td>
+</tr>
+<tr class="row-even"><td><p>uleb128</p></td>
+<td><p>id of base type</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="helper-entries">
+<h3>Helper entries<a class="headerlink" href="#helper-entries" title="Permalink to this heading">#</a></h3>
+<p>GhwRange</p>
+<p>CompositeBounds: see <a class="reference external" href="https://github.com/ghdl/ghdl/blob/master/src/grt/grt-waves.adb#L1283">https://github.com/ghdl/ghdl/blob/master/src/grt/grt-waves.adb#L1283</a></p>
+</section>
+</section>
+<section id="well-known-types">
+<h2>Well known types<a class="headerlink" href="#well-known-types" title="Permalink to this heading">#</a></h2>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>type</p></th>
+<th class="head"><p>content</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>8 bytes</p></td>
+<td><p>magic header “WKT” + 5 zero bytes</p></td>
+</tr>
+<tr class="row-odd"><td><p>–</p></td>
+<td><p><cite>TODO</cite></p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="hierarchy">
+<h2>Hierarchy<a class="headerlink" href="#hierarchy" title="Permalink to this heading">#</a></h2>
+<p>The hierarchy tree of the simulation.</p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>type</p></th>
+<th class="head"><p>content</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>8 bytes</p></td>
+<td><p>magic header “HIE” + 5 zero bytes</p></td>
+</tr>
+<tr class="row-odd"><td><p>i32</p></td>
+<td><p>number of subcomponents</p></td>
+</tr>
+<tr class="row-even"><td><p>i32</p></td>
+<td><p>number of scope signals</p></td>
+</tr>
+<tr class="row-odd"><td><p>i32</p></td>
+<td><p>number of (scalar) signals</p></td>
+</tr>
+<tr class="row-even"><td><p>GhwHie[]</p></td>
+<td><p>Hierarchy items</p></td>
+</tr>
+<tr class="row-odd"><td><p>byte</p></td>
+<td><p>zero byte</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Hierarchy elements can be classified into 3 categories:</p>
+<ol class="arabic simple">
+<li><p>Blocks, which describe hierarchy kinds block, generate*, instance, generic or package</p></li>
+<li><p>Signals, which describe signals and ports</p></li>
+<li><p>Meta class, which are used to mark the end of a scope or the hierarchy</p></li>
+</ol>
+<p>Each element (GhwHie) starts as follows:</p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>type</p></th>
+<th class="head"><p>content</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>unsigned byte</p></td>
+<td><p>kind of this hierarchy element (ghw_hie_kind)</p></td>
+</tr>
+<tr class="row-odd"><td><p>uleb128</p></td>
+<td><p>hierarchy id of its parent</p></td>
+</tr>
+<tr class="row-even"><td><p>uleb128</p></td>
+<td><p>id of name string</p></td>
+</tr>
+<tr class="row-odd"><td><p>uleb128</p></td>
+<td><p>id of its brother</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>all ids can be zero, i.e. if it is the top level element, it hase no parent.</p>
+<p><em>TODO block</em>
+<em>TODO signal</em></p>
+</section>
+<section id="end-of-header-marker">
+<h2>End of header marker<a class="headerlink" href="#end-of-header-marker" title="Permalink to this heading">#</a></h2>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>type</p></th>
+<th class="head"><p>content</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>4 bytes</p></td>
+<td><p>magic header “EOH” + 1 zero byte</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="snapshot">
+<h2>Snapshot<a class="headerlink" href="#snapshot" title="Permalink to this heading">#</a></h2>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>type</p></th>
+<th class="head"><p>content</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>8 bytes</p></td>
+<td><p>magic header “SNP” + 5 zero bytes</p></td>
+</tr>
+<tr class="row-odd"><td><p>i64</p></td>
+<td><p>current time</p></td>
+</tr>
+<tr class="row-even"><td><p>GhwVal[]</p></td>
+<td><p>inital values of all scalar signals</p></td>
+</tr>
+<tr class="row-odd"><td><p>4 bytes</p></td>
+<td><p>content: “ESN0”</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="cycles">
+<h2>Cycles<a class="headerlink" href="#cycles" title="Permalink to this heading">#</a></h2>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>type</p></th>
+<th class="head"><p>content</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>4 bytes</p></td>
+<td><p>magic header “CYC” + 1 zero bytes</p></td>
+</tr>
+<tr class="row-odd"><td><p>Cycle[]</p></td>
+<td><p>Values of all simulation cycles</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Single cycle content:</p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>type</p></th>
+<th class="head"><p>content</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>lsleb</p></td>
+<td><p>Time delta to previous cycle</p></td>
+</tr>
+<tr class="row-odd"><td><p>[]</p></td>
+<td><p>values of changed signals</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>After the last cycle an <em>lsleb</em> with value -1 follows (instead of the next time delta)
+to mark the end of the simulation run.</p>
+<p>The value entries consist of the index of the scalar signal in the signal table and the
+new signal value itself. The signal index is stored as <em>uleb128</em>. Further it is not the
+signal index itself, but the difference to the previous signal in that cycle. Assuming
+the signals 1,3 and 5 have changed in a cycle, the cycle would be stored as follows:
+[1, sigval1, 2, sigval3, 2, sigval5, 0]. The 0 marks the end of this cycle. The type of
+sigvalX depends of the type of the signal and is equivalent to the snapshot section
+type.</p>
+</section>
+<section id="directory">
+<h2>Directory<a class="headerlink" href="#directory" title="Permalink to this heading">#</a></h2>
+<p>This section contains the byte start addresses of each previous section in the file.</p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>type</p></th>
+<th class="head"><p>content</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>4 bytes</p></td>
+<td><p>magic header “DIR” + zero byte</p></td>
+</tr>
+<tr class="row-odd"><td><p>1 byte</p></td>
+<td><p>endianness: 1 for LE, 2 for BE</p></td>
+</tr>
+<tr class="row-even"><td><p>1 byte</p></td>
+<td><p>word size (4)</p></td>
+</tr>
+<tr class="row-odd"><td><p>1 byte</p></td>
+<td><p>file offset: ?</p></td>
+</tr>
+<tr class="row-even"><td><p>section addr[]</p></td>
+<td><p>section ids and addresses</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+<section id="tail">
+<h2>Tail<a class="headerlink" href="#tail" title="Permalink to this heading">#</a></h2>
+<p>The tail section has a constant size of 12 bits and points to the begin of the directory
+section, which can vary in size with future additions.</p>
+<div class="table-wrapper docutils container">
+<table class="docutils align-default">
+<thead>
+<tr class="row-odd"><th class="head"><p>type</p></th>
+<th class="head"><p>content</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td></td>
+<td></td>
+</tr>
+<tr class="row-odd"><td><p>4 bytes</p></td>
+<td><p>“TAI0”</p></td>
+</tr>
+<tr class="row-even"><td><p>1 byte</p></td>
+<td><p>endianness: 1 for LE, 2 for BE</p></td>
+</tr>
+<tr class="row-odd"><td><p>1 byte</p></td>
+<td><p>word size (4)</p></td>
+</tr>
+<tr class="row-even"><td><p>1 byte</p></td>
+<td><p>file offset: ?</p></td>
+</tr>
+<tr class="row-odd"><td><p>u32</p></td>
+<td><p>start address of dir section</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+</section>
+</section>
+
+        </article>
+      </div>
+      <footer>
+        
+        <div class="related-pages">
+          <a class="next-page" href="../development/Debugging.html">
+              <div class="page-info">
+                <div class="context">
+                  <span>Next</span>
+                </div>
+                <div class="title">Debugging</div>
+              </div>
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+            </a>
+          <a class="prev-page" href="index.html">
+              <svg class="furo-related-icon"><use href="#svg-arrow-right"></use></svg>
+              <div class="page-info">
+                <div class="context">
+                  <span>Previous</span>
+                </div>
+                
+                <div class="title">GHDL Waveform (GHW)</div>
+                
+              </div>
+            </a>
+        </div>
+        <div class="bottom-of-page">
+          <div class="left-details">
+            <div class="copyright">
+                Copyright &#169; 2002-2023, Tristan Gingold and contributors
+            </div>
+            Made with <a href="https://www.sphinx-doc.org/">Sphinx</a> and <a class="muted-link" href="https://pradyunsg.me">@pradyunsg</a>'s
+            
+            <a href="https://github.com/pradyunsg/furo">Furo</a>
+            
+          </div>
+          <div class="right-details">
+            <div class="icons">
+              <a class="muted-link fa-solid fa-brands fa-github" href="https://github.com/ghdl/ghdl" aria-label="GitHub ghdl/ghdl"></a>
+              
+            </div>
+          </div>
+        </div>
+        
+      </footer>
+    </div>
+    <aside class="toc-drawer">
+      
+      
+      <div class="toc-sticky toc-scroll">
+        <div class="toc-title-container">
+          <span class="toc-title">
+            On this page
+          </span>
+        </div>
+        <div class="toc-tree-container">
+          <div class="toc-tree">
+            <ul>
+<li><a class="reference internal" href="#">GHW file structure</a><ul>
+<li><a class="reference internal" href="#file-header">File header</a></li>
+<li><a class="reference internal" href="#strings">Strings</a></li>
+<li><a class="reference internal" href="#types">Types</a><ul>
+<li><a class="reference internal" href="#base-types">Base types</a></li>
+<li><a class="reference internal" href="#subtypes">Subtypes</a></li>
+<li><a class="reference internal" href="#helper-entries">Helper entries</a></li>
+</ul>
+</li>
+<li><a class="reference internal" href="#well-known-types">Well known types</a></li>
+<li><a class="reference internal" href="#hierarchy">Hierarchy</a></li>
+<li><a class="reference internal" href="#end-of-header-marker">End of header marker</a></li>
+<li><a class="reference internal" href="#snapshot">Snapshot</a></li>
+<li><a class="reference internal" href="#cycles">Cycles</a></li>
+<li><a class="reference internal" href="#directory">Directory</a></li>
+<li><a class="reference internal" href="#tail">Tail</a></li>
+</ul>
+</li>
+</ul>
+
+          </div>
+        </div>
+      </div>
+      
+      
+    </aside>
+  </div>
+</div><script data-url_root="../" id="documentation_options" src="../_static/documentation_options.js"></script>
+    <script src="../_static/doctools.js"></script>
+    <script src="../_static/sphinx_highlight.js"></script>
+    <script src="../_static/scripts/furo.js"></script>
+    </body>
+</html>
