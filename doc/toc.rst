@@ -35,6 +35,7 @@
    Building GHDL <development/building/index>
    Python Interfaces <pyGHDL/pyGHDL>
    ghw/index
+   ghw/filestructure
    development/Debugging
    development/CodingStyle
    development/Scripts
